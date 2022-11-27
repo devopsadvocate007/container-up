@@ -1,0 +1,26 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: mywebsite
+  labels:
+    app: mywebsite
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/devopsadvocate007/container-up
+    contextDir: httpd-hello-world
+  strategy:
+    type: Docker                      
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+      from:
+        kind: ImageStreamTag       # Use an imagestream tag as 'FROM'
+        namespace: naveen-will-dev    # Which project?
+        name: httpd:latest         # Use the imagestream created above
+  output:
+    to:
+      kind: ImageStreamTag
+      name: mywebsite:latest
+  triggers:
+  - type: ImageChange              # Trigger a build on image change
